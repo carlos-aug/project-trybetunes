@@ -9,11 +9,6 @@ import ProfileEdit from './pages/ProfileEdit';
 import Search from './pages/Search';
 
 class App extends React.Component {
-  // constructor() {
-  //   super();
-
-  // }
-
   render() {
     return (
       <div>

@@ -16,9 +16,7 @@ class Login extends React.Component {
   handleTextInputChange = ({ target }) => {
     const userName = target.value;
     const minCharactersInputName = 3;
-    this.setState({
-      inputName: userName,
-    });
+    this.setState({ inputName: userName });
     if (userName.length >= minCharactersInputName) {
       this.setState({ enableButton: false });
     } else {
