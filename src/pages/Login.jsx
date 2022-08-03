@@ -25,10 +25,9 @@ class Login extends React.Component {
     }
   }
 
-  getUser = async () => {
+  fetchUser = async () => {
     const { inputName } = this.state;
     const { history } = this.props;
-    console.log(history);
     this.setState({ loading: true });
     await createUser({ name: inputName });
     history.push('/search');
@@ -54,7 +53,7 @@ class Login extends React.Component {
           data-testid="login-submit-button"
           type="button"
           disabled={ enableButton }
-          onClick={ this.getUser }
+          onClick={ this.fetchUser }
         >
           Entrar
         </button>
