@@ -41,51 +41,53 @@ class Search extends React.Component {
   render() {
     const { inputSearch, enableButton, loading, songs, artist } = this.state;
     return (
-      <div data-testid="page-search">
-        {loading ? (
-          <Loading />
-        ) : (
+      <div>
+        <div data-testid="page-search">
+          <Header />
+          {loading ? (
+            <Loading />
+          ) : (
+            <div>
+              <label htmlFor="search">
+                <input
+                  id="search"
+                  data-testid="search-artist-input"
+                  onChange={ this.handleTextInputChange }
+                  value={ inputSearch }
+                />
+              </label>
+              <button
+                type="button"
+                data-testid="search-artist-button"
+                disabled={ enableButton }
+                onClick={ this.fetchAlbums }
+              >
+                Pesquisar
+              </button>
+            </div>
+          )}
           <div>
-            <label htmlFor="search">
-              <input
-                id="search"
-                data-testid="search-artist-input"
-                onChange={ this.handleTextInputChange }
-                value={ inputSearch }
-              />
-            </label>
-            <button
-              type="button"
-              data-testid="search-artist-button"
-              disabled={ enableButton }
-              onClick={ this.fetchAlbums }
-            >
-              Pesquisar
-            </button>
+            <p>
+              {`Resultado de álbuns de: ${artist}`}
+            </p>
+
+            {songs.length === 0 && <p>Nenhum álbum foi encontrado</p>}
+
+            {songs.map((song) => (
+              <Link
+                key={ `${song.collectionId}` }
+                to={ `/album/${song.collectionId}` }
+                data-testid={ `link-to-album-${song.collectionId}` }
+              >
+                <p>{song.artistName}</p>
+                <p>{song.collectionName}</p>
+                <p>{song.collectionPrice}</p>
+                <img src={ song.artworkUrl100 } alt={ song.artistName } />
+                <p>{song.trackCount}</p>
+              </Link>
+            ))}
           </div>
-        )}
-        <div>
-          <p>
-            {`Resultado de álbuns de: ${artist}`}
-          </p>
-
-          {songs.length === 0 && <p>Nenhum álbum foi encontrado</p>}
-
-          {songs.map((song) => (
-            <Link
-              key={ `${song.collectionId}` }
-              to={ `/album/${song.collectionId}` }
-              data-testid={ `link-to-album-${song.collectionId}` }
-            >
-              <p>{song.artistName}</p>
-              <p>{song.collectionName}</p>
-              <p>{song.collectionPrice}</p>
-              <img src={ song.artworkUrl100 } alt={ song.artistName } />
-              <p>{song.trackCount}</p>
-            </Link>
-          ))}
         </div>
-        <Header />
       </div>
     );
   }
