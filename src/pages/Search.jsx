@@ -17,10 +17,6 @@ class Search extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.fetchAlbums();
-  }
-
   handleTextInputChange = ({ target }) => {
     const artist = target.value;
     const minCharactersInputName = 2;

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { addSong } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 
 class MusicCard extends React.Component {
@@ -11,15 +12,17 @@ class MusicCard extends React.Component {
 
   handleChange = ({ target }) => {
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    this.setState({ checked: value });
+    this.setState({ checked: value }, () => {
+      this.fechFavoritesSongs();
+    });
   }
 
-  // fechFavoritesSongs = async () => {
-  //   const { musicList } = this.props;
-  //   this.setState({ loading: true });
-  //   const favoritesSongs = await addSong(musicList);
-  //   this.setState({ loading: false });
-  // };
+  fechFavoritesSongs = async () => {
+    const { music } = this.props;
+    this.setState({ loading: true });
+    await addSong(music);
+    this.setState({ loading: false });
+  };
 
   render() {
     const { trackName, previewUrl, trackId } = this.props;
@@ -41,12 +44,12 @@ class MusicCard extends React.Component {
 
             </audio>
 
-            <label htmlFor="favorite-check-box">
+            <label htmlFor={ trackId }>
               <input
-                id="favorite-check-box"
+                id={ trackId }
                 type="checkbox"
                 name="checkbox"
-                value={ checked }
+                checked={ checked }
                 data-testid={ `checkbox-music-${trackId}` }
                 onChange={ this.handleChange }
               />
@@ -63,6 +66,7 @@ MusicCard.propTypes = {
   trackName: PropTypes.string.isRequired,
   previewUrl: PropTypes.string.isRequired,
   trackId: PropTypes.string.isRequired,
+  music: PropTypes.string.isRequired,
 };
 
 export default MusicCard;

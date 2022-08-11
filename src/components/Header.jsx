@@ -8,16 +8,16 @@ class Header extends React.Component {
     super();
 
     this.state = {
-      loading: false,
+      loading: true,
       user: '',
     };
   }
 
-  componentDidMount() {
-    this.setState({ loading: true }, async () => {
-      const userName = await getUser();
-      this.setState({ loading: false, user: userName.name });
-    });
+  async componentDidMount() {
+    // this.setState({ loading: true }, async () => {
+    const userName = await getUser();
+    this.setState({ loading: false, user: userName.name });
+    // });
   }
 
   render() {
