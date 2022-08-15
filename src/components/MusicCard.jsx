@@ -1,13 +1,24 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 
 class MusicCard extends React.Component {
   constructor() {
     super();
 
-    this.state = { loading: false, checked: false };
+    this.state = { loading: false, checked: false, favoriteSongs: [] };
+  }
+
+  componentDidMount() {
+    this.pegaDoLocalStorarage();
+  }
+
+  pegaDoLocalStorarage = async () => {
+    const { trackId } = this.props;
+    const response = await getFavoriteSongs();
+    const returnResponse = response.some((music) => music.trackId === trackId);
+    this.setState({ checked: returnResponse });
   }
 
   handleChange = ({ target }) => {
@@ -17,16 +28,19 @@ class MusicCard extends React.Component {
     });
   }
 
-  fechFavoritesSongs = async () => {
+  fechFavoritesSongs = () => {
     const { music } = this.props;
-    this.setState({ loading: true });
-    await addSong(music);
-    this.setState({ loading: false });
+    console.log(music);
+    this.setState({ loading: true }, async () => {
+      await addSong(music);
+      const response = await getFavoriteSongs();
+      this.setState({ loading: false, favoriteSongs: response });
+    });
   };
 
   render() {
     const { trackName, previewUrl, trackId } = this.props;
-    const { loading, checked } = this.state;
+    const { loading, checked, favoriteSongs } = this.state;
     return (
       <div>
         { loading ? <Loading /> : (
@@ -56,6 +70,7 @@ class MusicCard extends React.Component {
               {' '}
               Favorita
             </label>
+
           </div>)}
       </div>
     );
@@ -65,8 +80,8 @@ class MusicCard extends React.Component {
 MusicCard.propTypes = {
   trackName: PropTypes.string.isRequired,
   previewUrl: PropTypes.string.isRequired,
-  trackId: PropTypes.string.isRequired,
-  music: PropTypes.string.isRequired,
+  trackId: PropTypes.number.isRequired,
+  // music: PropTypes.object.isRequired
 };
 
 export default MusicCard;
