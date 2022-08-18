@@ -10,7 +10,6 @@ class MusicCard extends React.Component {
     this.state = {
       loading: false,
       checked: false,
-      // favoriteSongs: [],
     };
   }
 
@@ -29,29 +28,23 @@ class MusicCard extends React.Component {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({ checked: value }, () => {
       this.fetchFavoritesSongs();
-      this.fetchRemoveFavorite();
     });
   };
 
   fetchFavoritesSongs = () => {
     const { music } = this.props;
+    const { checked } = this.state;
     this.setState({ loading: true }, async () => {
-      await addSong(music);
+      if (checked === true) {
+        await addSong(music);
+      } else if (!checked) {
+        await removeSong(music);
+      }
       this.setState({
         loading: false,
       });
     });
   };
-
-  fetchRemoveFavorite = () => {
-    const { music } = this.props;
-    this.setState({ loading: true }, async () => {
-      await removeSong(music);
-      this.setState({
-        loading: false,
-      });
-    });
-  }
 
   render() {
     const { trackName, previewUrl, trackId } = this.props;
