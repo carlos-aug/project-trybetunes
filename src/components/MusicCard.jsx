@@ -29,16 +29,20 @@ class MusicCard extends React.Component {
     this.setState({ checked: value }, () => {
       this.fetchFavoritesSongs();
     });
+    // this.props.xablau('xablau');
   };
 
   fetchFavoritesSongs = () => {
-    const { music } = this.props;
+    const { music, fetchFavoritesSongs } = this.props;
     const { checked } = this.state;
     this.setState({ loading: true }, async () => {
       if (checked === true) {
         await addSong(music);
       } else if (!checked) {
         await removeSong(music);
+      }
+      if (fetchFavoritesSongs) {
+        fetchFavoritesSongs();
       }
       this.setState({
         loading: false,
